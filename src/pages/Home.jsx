@@ -19,7 +19,8 @@ function Home() {
 
             const postWithImages = await Promise.all(allPosts.map(async (post) => {
                 const details = await axios.get(post.url)
-                return { name: post.name, imgURL: details.data.sprites.front_default }
+                url=details.data.sprites.front_default||''
+                return { name: post.name, imgURL: url }
             }))
 
             setPosts(postWithImages)
