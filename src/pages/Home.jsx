@@ -16,12 +16,11 @@ function Home() {
             setLoading(true)
             const response = await axios.get(currentUrl)
             const allPosts = response.data.results
-            const postWithImages = []
 
-            for (let post of allPosts) {
+            const postWithImages = await Promise.all(allPosts.map(async (post) => {
                 const details = await axios.get(post.url)
-                postWithImages.push({ name: post.name, imgURL: details.data.sprites.front_default })
-            }
+                return { name: post.name, imgURL: details.data.sprites.front_default }
+            }))
 
             setPosts(postWithImages)
             setNextUrl(response.data.next)
