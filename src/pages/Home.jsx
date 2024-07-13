@@ -18,9 +18,14 @@ function Home() {
             const allPosts = response.data.results
 
             const postWithImages = await Promise.all(allPosts.map(async (post) => {
-                const details = await axios.get(post.url)
-                const url=details.data.sprites.front_default||''
-                return { name: post.name, imgURL: url }
+                try {
+                    const details = await axios.get(post.url);
+                    const imgURL = details.data.sprites.front_default || '';
+                    return { name: post.name, imgURL: imgURL };
+                } catch (error) {
+                    console.error(`Error fetching details for ${post.name}: `, error);
+                    return { name: post.name, imgURL: '' }; 
+                }
             }))
 
             setPosts(postWithImages)
